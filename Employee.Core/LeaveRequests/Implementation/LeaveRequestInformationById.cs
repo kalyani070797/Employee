@@ -1,0 +1,33 @@
+﻿using Employee.Core.LeaveRequests.Interface;
+using Employee.Infrastructure.PracticeDbContext;
+using Employee.Model.LeaveRequests;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Employee.Core.LeaveRequests.Implementation
+{
+    public class LeaveRequestInformationById(EmployeeDbContext employeeDbContext) : ILeaveRequestInformationById
+    {
+        public LeaveRequestResponseModel GetAllLeaveRequestById(int leaveRequestId)
+        {
+            var leaveRequestInformation = employeeDbContext.LeaveRequest
+                .Where(i => i.LeaveRequestId == leaveRequestId)
+                .Select(i => new LeaveRequestResponseModel
+                {
+                    LeaveRequestId = i.LeaveRequestId,
+                    EmployeeDetailsId = i.EmployeeDetailsId,
+                    AdminId = i.AdminId,
+                    LeaveReason = i.LeaveReason,
+                    StatusId = i.StatusId,
+                    LeaveType = i.LeaveType,
+                    FromDate = i.FromDate,
+                    ToDate = i.ToDate,
+                    TotalLeaves = i.TotalLeaves,
+                }).FirstOrDefault();
+            return leaveRequestInformation;
+        }
+    }
+}
